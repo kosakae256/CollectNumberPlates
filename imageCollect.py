@@ -7,10 +7,10 @@ from detect import detection_number
 from conf import CK,CS,AK,AS
 
 # 画像の保存先
-IMG_DIR = 'C:/Users/kosakae256/OneDrive/Docments/CollectNumbers/tempimgs/'
-detectpath = "C:/Users/kosakae256/OneDrive/Docments/CollectNumbers/detectimgs"
-formpath = "C:/Users/kosakae256/OneDrive/Docments/CollectNumbers/formimgs"
-jsonpath = "C:/Users/kosakae256/OneDrive/Docments/CollectNumbers/detectjsons/"
+IMG_DIR = 'C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/tempimgs/'
+detectpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/detectimgs"
+formpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/formimgs"
+jsonpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/detectjsons/"
 
 # 環境変数
 CONSUMER_KEY        = CK
@@ -19,10 +19,10 @@ ACCESS_TOKEN_KEY    = AK
 ACCESS_TOKEN_SECRET = AS
 
 # 検索キーワード
-TARGETS = ['#納車',"#プリウス","#ベンツ","#日産","#消防車","#パトカー","#コペン","#ホンダ","#ニッサン","#トヨタ","#ジープ","#メルセデス"]
-
+TARGETS = ["パトカー","コペン","ホンダ","ニッサン","トヨタ","ジープ","メルセデス","#レクサス","レクサス","マツダ","#マツダ","ダイハツ","#ダイハツ","カローラ","#カローラ"]
+"""['#納車',"#プリウス","#ベンツ","#日産","#消防車","#パトカー","#コペン","#ホンダ","#ニッサン","#トヨタ","#ジープ","#メルセデス"]"""
 # 検索オプション
-SEARCH_PAGES_NUMBER = 10000 # 読み込むページ数
+SEARCH_PAGES_NUMBER = 1000 # 読み込むページ数
 PER_PAGE_NUMBER = 100 # ページごとに返されるツイートの数（最大100）
 
 class imageDownloader(object):
@@ -47,11 +47,11 @@ class imageDownloader(object):
 
                 #エラーはいた場合
                 if ret_url_list == None:
-                    time.sleep(60)
+                    time.sleep(60*10)
                     continue
 
                 #検索しきった場合
-                if ret_url_list == []:
+                if ret_url_list == False:
                     break
 
                 for url in ret_url_list:
@@ -59,7 +59,7 @@ class imageDownloader(object):
                     self.download(url)
                     detection_number(self.path,detectpath,formpath,jsonpath,self.filename)
 
-                time.sleep(1) # TimeOut防止
+                time.sleep(2.5) # spam防止
 
     def set_api(self):
         """apiの設定
@@ -81,6 +81,11 @@ class imageDownloader(object):
                 res_search = self.api.search(q=target, lang='ja', rpp=rpp, max_id=self.max_id)
             else:
                 res_search = self.api.search(q=target, lang='ja', rpp=rpp)
+
+            #検索しきった場合
+            if res_search == []:
+                return False
+
             # 結果を保存
             for result in res_search:
                 if 'media' not in result.entities: continue
