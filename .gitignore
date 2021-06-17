@@ -2,3 +2,8 @@ conf.py
 .venv
 __pycache__
 testimgs
+01.tempimgs
+02.formimgs
+03.detectimgs
+04.tfrecords
+detectjsons

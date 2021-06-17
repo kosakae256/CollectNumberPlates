@@ -27,12 +27,12 @@ def create_tf_example(height,
   #            # (1 per box)
   # classes_text = [] # List of string class name of bounding box (1 per box)
   # classes = [] # List of integer class id of bounding box (1 per box)
-
-  with tf.io.gfile.GFile(f"C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/formimgs/form{filename}", 'rb') as fid:
-      encoded_jpg = fid.read()
+    
+    with tf.io.gfile.GFile(f"C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/02.formimgs/form{filename}", 'rb') as fid:
+        encoded_jpg = fid.read()
       # encoded_jpg_io = io.BytesIO(encoded_jpg)
 
-  tf_example = tf.train.Example(features=tf.train.Features(feature={
+    tf_example = tf.train.Example(features=tf.train.Features(feature={
       'image/height': dataset_util.int64_feature(height),
       'image/width': dataset_util.int64_feature(width),
       'image/filename': dataset_util.bytes_feature(filename.encode("utf-8")),
@@ -45,20 +45,21 @@ def create_tf_example(height,
       'image/object/bbox/ymax': dataset_util.float_list_feature(ymaxs),
       'image/object/class/text': dataset_util.bytes_list_feature(classes_text),
       'image/object/class/label': dataset_util.int64_list_feature(classes),
-  }))
-  return tf_example
+    }))
+    return tf_example
 
-from object_detection.dataset_tools import tf_record_creation_util
 def output_tfrecord(tfdata,datale):
 
 
-    output_path=f'C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/tfrecords/{str(datale+200).zfill(6)}.tfrecord'
+    output_path=f'C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/04.tfrecords/{str(datale).zfill(6)}.tfrecord'
 
     writer = tf.io.TFRecordWriter(output_path)
 
     height = tfdata["height"]
     width = tfdata["width"]
     filename = tfdata["filename"]
+
+    print(filename)
 
     image_format = b"jpg"
 

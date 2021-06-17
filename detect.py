@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import json
 
-model_path = 'C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/model/model2/saved_model'
+model_path = 'C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/model/model2/saved_model'
 DEFAULT_FUNCTION_KEY = 'serving_default'
 loaded_model = tf.saved_model.load(model_path)
 inference_func = loaded_model.signatures[DEFAULT_FUNCTION_KEY]
@@ -47,7 +47,7 @@ def detection_number(readpath,detectpath,formpath,jsonpath,filename):
         labelclass = output['detection_classes'][i]
 
         #この数値以上の信頼度なら通る
-        if score < 0.3:
+        if score < 0.30:
             continue
         print(labelclass)
         x1, y1 = int(bbox[1] * image_width), int(bbox[0] * image_height)
@@ -70,10 +70,10 @@ def detection_number(readpath,detectpath,formpath,jsonpath,filename):
             json.dump(detectdict, f)
 
 if __name__ == "__main__":
-    detectpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/detectimgs"
-    formpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/formimgs"
-    jsonpath = "C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/detectjsons"
-    temp_data_dir = 'C:/Users/kosakae256/Documents/Kosakae-Deployment/CollectNumberPlates/tempimgs'
+    detectpath = "C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/detectimgs"
+    formpath = "C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/formimgs"
+    jsonpath = "C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/detectjsons"
+    temp_data_dir = 'C:/Users/kosakae256/Documents/01Develop/CollectNumberPlates/tempimgs'
     tempfile_list = sorted(glob.glob(temp_data_dir + '/*.jpg'))
     for filecount, fpath in enumerate(tempfile_list):
         fpath = fpath.replace("\\","/")
